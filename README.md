@@ -1,54 +1,119 @@
-Django Simple Captcha Integration
-1. O'rnatish
-Bash
-pip install django-simple-captcha
-2. settings.py
-INSTALLED_APPS ro'yxatiga qo'shing:
+# 🛡️ Django Simple CAPTCHA Integration
 
-Python
+Bu loyiha **Django** ilovasida spam va botlardan himoya qilish uchun `django-simple-captcha` paketini qanday o‘rnatish va ishlatishni ko‘rsatadi.
+
+---
+
+## 📦 O‘rnatish
+
+```bash
+pip install django-simple-captcha
+```
+
+---
+
+## ⚙️ Sozlash (settings.py)
+
+`INSTALLED_APPS` ga qo‘shing:
+
+```python
 INSTALLED_APPS = [
-    # ...
+    ...
     'captcha',
 ]
-3. urls.py
-Asosiy urls.py fayliga marshrutni qo'shing:
+```
 
-Python
+Migratsiya qiling:
+
+```bash
+python manage.py migrate
+```
+
+---
+
+## 🔗 URL sozlash
+
+`urls.py` fayliga qo‘shing:
+
+```python
 from django.urls import path, include
 
 urlpatterns = [
-    # ...
+    ...
     path('captcha/', include('captcha.urls')),
 ]
-4. Migratsiya
-Bash
-python manage.py migrate
-5. forms.py
-Formaga CaptchaField ni qo'shing:
+```
 
-Python
+---
+
+## 📝 Formada ishlatish
+
+```python
 from django import forms
 from captcha.fields import CaptchaField
 
-class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+class MyForm(forms.Form):
+    name = forms.CharField(max_length=100)
     captcha = CaptchaField()
-6. views.py
-is_valid() metodidan foydalaning (u captchani avtomatik tekshiradi):
+```
 
-Python
-def login_user(request):
-    form = LoginForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            # Captcha to'g'ri, login mantiqi shu yerda
-            pass
-    return render(request, 'login.html', {'form': form})
-7. login.html
-HTML
+---
+
+## 🎨 Template (HTML)
+
+```html
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Kirish</button>
+    <button type="submit">Submit</button>
 </form>
+```
+
+---
+
+## ⚡ Qanday ishlaydi?
+
+- Foydalanuvchiga rasm + kod ko‘rsatiladi  
+- U kodni to‘g‘ri kiritsa → form o‘tadi  
+- Noto‘g‘ri bo‘lsa → xatolik qaytariladi  
+
+---
+
+## 🔧 Qo‘shimcha sozlamalar
+
+`settings.py` ichida:
+
+```python
+CAPTCHA_LENGTH = 5
+CAPTCHA_FONT_SIZE = 50
+CAPTCHA_IMAGE_SIZE = (150, 50)
+```
+
+---
+
+## 🚀 Ishlatish sabablari
+
+- Spamni kamaytiradi  
+- Botlardan himoya qiladi  
+- Oson integratsiya qilinadi  
+- Django bilan to‘liq mos  
+
+---
+
+## ❗ Eslatma
+
+Agar CAPTCHA chiqmasa:
+
+- `captcha` app qo‘shilganini tekshiring  
+- `migrate` qilinganini tekshiring  
+- `urls.py` to‘g‘ri ulanganini tekshiring  
+
+---
+
+## 📚 Foydali maslahat
+
+Development vaqtida tez-tez CAPTCHA yangilash uchun:
+
+```python
+CAPTCHA_TIMEOUT = 1  # minut
+```
